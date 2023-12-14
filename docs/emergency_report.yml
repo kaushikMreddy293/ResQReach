@@ -1,0 +1,160 @@
+openapi: 3.1.0
+info:
+  title: Disaster Report API
+  description: ResQReach API to manage disaster reports 
+  version: "1.0.0"
+servers:
+  - url: http://localhost:3001
+
+paths:
+  /reports:
+    post:
+      summary: Submit a new emergency report
+      tags:
+        - Reports
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report'
+      responses:
+        '201':
+          description: Emergency report created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        '400':
+          description: Invalid input
+          content: 
+            application/json:
+              example:
+                message: Invalid Input
+    get:
+      summary: Retrieve a list of recent emergency reports
+      tags:
+        - Reports
+      responses:
+        '200':
+          description: A list of reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Report'
+
+  /reports/{id}:
+    get:
+      summary: Get detailed information about a specific report
+      tags:
+        - Reports
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 1
+          description: Unique identifier of the emergency report
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detailed report data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        '404':
+          description: Report not found
+          content: 
+            application/json:
+              example:
+                message: Report does not exist
+    put:
+      summary: Update an existing report
+      tags:
+        - Reports
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 2
+          description: Unique identifier of the emergency report
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report-Id'
+      responses:
+        '200':
+          description: Report updated
+          content: 
+            application/json:
+              example:
+                message: Report Updated
+        '400':
+          description: Invalid input
+          content: 
+            application/json:
+              example:
+                message: Invalid Input
+        '404':
+          description: Report not found
+          content: 
+            application/json:
+              example:
+                message: Report does not exist
+    delete:
+      summary: Delete a report
+      tags:
+        - Reports
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 3
+          description: Unique identifier of the emergency report
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Report deleted
+          content: 
+            application/json:
+              example:
+                message: Report Deleted
+        '404':
+          description: Report not found
+          content: 
+            application/json:
+              example:
+                message: Report does not exist
+
+components:
+  schemas: 
+    Report:
+      type: object 
+      properties: 
+        report-title:
+          type: string 
+          examples: 
+            - "Earthquake Warning"
+        scale-value:
+          type: string 
+          examples: 
+            - "7.0"
+    Report-Id:
+      type: object 
+      properties: 
+        report-title:
+          type: string 
+          examples: 
+            - "Earthquake Warning"
+        Id:
+          type: integer 
+          examples: 
+            - 3

@@ -1,0 +1,974 @@
+openapi: 3.1.0
+info:
+  title: ResQReach All API
+  description: ResQReach API to manage all features
+  version: "1.0.0"
+servers:
+  - url: http://localhost:3001
+    description: Production Server
+
+paths:
+  /reports:
+    post:
+      summary: Submit a new emergency report
+      tags:
+        - Reports
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report'
+      responses:
+        '201':
+          description: Emergency report created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        '400':
+          description: Invalid input
+          content: 
+            application/json:
+              example:
+                message: Invalid Input
+    get:
+      summary: Retrieve a list of recent emergency reports
+      tags:
+        - Reports
+      responses:
+        '200':
+          description: A list of reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Report'
+
+  /reports/{id}:
+    get:
+      summary: Get detailed information about a specific report
+      tags:
+        - Reports
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 1
+          description: Unique identifier of the emergency report
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detailed report data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        '404':
+          description: Report not found
+          content: 
+            application/json:
+              example:
+                message: Report does not exist
+    put:
+      summary: Update an existing report
+      tags:
+        - Reports
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 2
+          description: Unique identifier of the emergency report
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report-Id'
+      responses:
+        '200':
+          description: Report updated
+          content: 
+            application/json:
+              example:
+                message: Report Updated
+        '400':
+          description: Invalid input
+          content: 
+            application/json:
+              example:
+                message: Invalid Input
+        '404':
+          description: Report not found
+          content: 
+            application/json:
+              example:
+                message: Report does not exist
+    delete:
+      summary: Delete a report
+      tags:
+        - Reports
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 3
+          description: Unique identifier of the emergency report
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Report deleted
+          content: 
+            application/json:
+              example:
+                message: Report Deleted
+        '404':
+          description: Report not found
+          content: 
+            application/json:
+              example:
+                message: Report does not exist
+  /contributor:
+    post:
+      summary: Create a new contributor
+      tags:
+        - Contributors
+      requestBody:
+        required: true
+        description: JSON object containing contributor information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/contributor'
+      responses:
+        '201':
+          description: Successfully created a new contributor
+          content:
+            application/json:
+              example:
+                message: Success
+        '400':
+          description: Invalid input provided
+          content:
+            application/json:
+              example:
+                message: Invalid Input
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                message: Error
+ 
+  /contributor/{id}:
+    get:
+      summary: Get detailed information about a specific contributor
+      tags:
+        - Contributors
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the contributor.
+          schema:
+            type: string
+            example: "243"
+      responses:
+        '200':
+          description: Successfully retrieved contributor data
+          content:
+            application/json:
+              example:
+                message: Success
+        '404':
+          description: Contributor not found
+          content:
+            application/json:
+              example:
+                message: User not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                message: Error
+ 
+    put:
+      summary: Update an existing contributor
+      tags:
+        - Contributors
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the contributor to be updated.
+          schema:
+            type: string
+            example: "1"
+      requestBody:
+        required: true
+        description: JSON object containing contributor information to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/contributor'
+      responses:
+        '200':
+          description: Successfully updated contributor data
+          content:
+            application/json:
+              example:
+                message: Success
+        '400':
+          description: Invalid input provided
+          content:
+            application/json:
+              example:
+                message: Invalid input
+        '404':
+          description: contributor not found
+          content:
+            application/json:
+              example:
+                message: User not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                message: Error
+ 
+    delete:
+      summary: Delete a contributor
+      tags:
+        - Contributors
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the contributor to be deleted.
+          schema:
+            type: string
+            example: "243"
+      responses:
+        '204':
+          description: Successfully deleted the contributor
+          content:
+            application/json:
+              example:
+                message: Delete Success
+        '404':
+          description: contributor not found
+          content:
+            application/json:
+              example:
+                message: User not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                message: Error
+  /preparedness-guides:
+    get:
+      summary: List all preparedness guides
+      tags:
+        - Preparedness Guides
+      responses:
+        '200':
+          description: Successfully retrieved a list of preparedness guides
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PreparednessGuide'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/4xxErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/5xxErrorResponse'
+
+    post:
+      summary: Create a new preparedness guide
+      tags:
+        - Preparedness Guides
+      requestBody:
+        required: true
+        description: JSON object containing new preparedness guide information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreparednessGuide'
+      responses:
+        '201':
+          description: Preparedness guide successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreparednessGuide'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/4xxErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/5xxErrorResponse'
+
+  /preparedness-guides/{id}:
+    put:
+      summary: Update an existing preparedness guide
+      tags:
+        - Preparedness Guides
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the preparedness guide to be updated.
+          schema:
+            type: string
+            format: uuid
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        description: JSON object containing updated information for the preparedness guide
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreparednessGuide'
+      responses:
+        '200':
+          description: Successfully updated the preparedness guide
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PreparednessGuide'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/4xxErrorResponse'
+        '404':
+          description: Guide not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/4xxErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/5xxErrorResponse'
+
+    delete:
+      summary: Delete a preparedness guide
+      tags:
+        - Preparedness Guides
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the preparedness guide to be deleted.
+          schema:
+            type: string
+            format: uuid
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '204':
+          description: Successfully deleted the preparedness guide
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeleteGuide'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/4xxErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/5xxErrorResponse'
+  /leftoverfood:
+    get:
+      summary: Get all available leftover food items
+      tags:
+        - Leftover Food
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FoodItem'
+    post:
+      summary: Post a new leftover food item
+      tags:
+        - Leftover Food
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FoodItemInput'
+      responses:
+        '201':
+          description: Resource created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoodItem'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /leftoverfood/{id}:
+    get:
+      summary: Get details of a specific leftover food item by ID
+      tags:
+        - Leftover Food
+      parameters:
+        - name: id
+          in: path
+          description: ID of the leftover food item to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoodItem'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      summary: Update details of a specific leftover food item by ID
+      tags:
+        - Leftover Food
+      parameters:
+        - name: id
+          in: path
+          description: ID of the leftover food item to update
+          required: true
+          schema:
+            type: integer
+        - name: updatedFoodItem
+          in: requestBody
+          description: Updated details of the leftover food item
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoodItemInput'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoodItem'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Delete a specific leftover food item by ID
+      tags:
+        - Leftover Food
+      parameters:
+        - name: id
+          in: path
+          description: ID of the leftover food item to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Resource deleted successfully
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /leftoverfood/collect/{id}:
+    put:
+      summary: Mark a specific leftover food item as collected
+      tags:
+        - Leftover Food
+      parameters:
+        - name: id
+          in: path
+          description: ID of the leftover food item to mark as collected
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoodItem'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /leftoverfood/collected:
+    get:
+      summary: Get all collected leftover food items
+      tags:
+        - Leftover Food
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FoodItem'
+
+  /leftoverfood/filter:
+    get:
+      summary: Filter available leftover food items based on criteria
+      tags:
+        - Leftover Food
+      parameters:
+        - name: name
+          in: query
+          description: Name of the leftover food item to filter
+          schema:
+            type: string
+        - name: expiration_date
+          in: query
+          description: Expiration date to filter
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FoodItem'
+
+  /leftoverfood/{id}/reviews:
+    get:
+      summary: Get all reviews for a specific leftover food item by ID
+      tags:
+        - Leftover Food
+      parameters:
+        - name: id
+          in: path
+          description: ID of the leftover food item
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /leftoverfood/{id}/reviews/post:
+    post:
+      summary: Post a review for a specific leftover food item by ID
+      tags:
+        - Leftover Food
+      parameters:
+        - name: id
+          in: path
+          description: ID of the leftover food item
+          required: true
+          schema:
+            type: integer
+        - name: review
+          in: requestBody
+          description: The details of the review
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewInput'
+      responses:
+        '201':
+          description: Review posted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /user/profile:
+    get:
+      summary: Get the user's profile details
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+
+  /user/follow/{username}:
+    put:
+      summary: Follow another user
+      parameters:
+        - name: username
+          in: path
+          description: Username of the user to follow
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /user/unfollow/{username}:
+    put:
+      summary: Unfollow another user
+      parameters:
+        - name: username
+          in: path
+          description: Username of the user to unfollow
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /user/followed/items:
+    get:
+      summary: Get all leftover food items posted by followed users
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FoodItem'
+components:
+  schemas: 
+    Report:
+      type: object 
+      properties: 
+        report-title:
+          type: string 
+          examples: 
+            - "Earthquake Warning"
+        scale-value:
+          type: string 
+          examples: 
+            - "7.0"
+    Report-Id:
+      type: object 
+      properties: 
+        report-title:
+          type: string 
+          examples: 
+            - "Earthquake Warning"
+        Id:
+          type: integer 
+          examples: 
+            - 3
+    contributor:
+      type: object
+      required:
+        - username
+        - email
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the contributor, automatically generated.
+          example: "123"
+        username:
+          type: string
+          description: The contributor's chosen username. It must be unique.
+          example: "john_doe"
+        email:
+          type: string
+          format: email
+          description: The contributor's email address. It is used for communication and login.
+          example: "john.doe@example.com"
+        fullName:
+          type: string
+          description: Full legal name of the contributor.
+          example: "John Doe"
+        role:
+          type: string
+          description: The role of the contributor in the system.
+          enum:
+            - admin
+            - volunteer
+            - user
+          example: "User"
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp when the contributor was created in the system.
+          example: "2023-01-01T12:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp of the last update made to the contributor's profile.
+          example: "2023-01-15T12:00:00Z"
+    PreparednessGuide:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the guide, automatically generated.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        title:
+          type: string
+          description: Title of the preparedness guide.
+          example: "Earthquake Safety Measures"
+        content:
+          type: string
+          description: Detailed content of the guide, providing instructions and information.
+          example: "Earthquakes can occur without warning..."
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp when the guide was last updated.
+          example: "2023-01-01T12:00:00Z"
+      required:
+        - title
+        - content
+    4xxErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: integer
+          format: int32
+          description: Standardized error code representing the error type.
+          example: 4xx
+        errorMessage:
+          type: string
+          description: Human-readable message describing the error.
+          example: "Bad Request Error"
+        errorInfo:
+          type: object
+          additionalProperties: true
+          description: Additional details about the error if applicable.
+          example: "HTTP 4xx: Exception occured from API"
+      required:
+        - errorCode
+        - errorMessage
+    5xxErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: integer
+          format: int32
+          description: Standardized error code representing the error type.
+          example: 5xx
+        errorMessage:
+          type: string
+          description: Human-readable message describing the error.
+          example: "Internal Server Error"
+        errorInfo:
+          type: object
+          additionalProperties: true
+          description: Additional details about the error if applicable.
+          example: "HTTP 5xx: Exception occured from API"
+      required:
+        - errorCode
+        - errorMessage
+    DeleteGuide:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the guide, automatically generated.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        title:
+          type: string
+          description: Title of the preparedness guide.
+          example: "Earthquake Safety"
+        message:
+          type: string
+          description: Detailed content of the guide, providing instructions and information.
+          example: "Guide deleted"
+      required:
+        - title
+        - message
+    FoodItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+        expiration_date:
+          type: string
+          format: date
+        is_collected:
+          type: boolean
+          description: Indicates whether the food item has been collected
+
+    FoodItemInput:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the leftover food item
+        description:
+          type: string
+          description: Description of the leftover food item
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity of the leftover food item
+        expiration_date:
+          type: string
+          format: date
+          description: Expiration date of the leftover food item
+
+    Review:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        user:
+          type: string
+          description: Name or identifier of the user who posted the review
+        rating:
+          type: integer
+          description: Rating given to the leftover food item (1-5)
+        comment:
+          type: string
+          description: Comment or feedback on the leftover food item
+
+    ReviewInput:
+      type: object
+      properties:
+        user:
+          type: string
+          description: Name or identifier of the user posting the review
+        rating:
+          type: integer
+          description: Rating given to the leftover food item (1-5)
+        comment:
+          type: string
+          description: Comment or feedback on the leftover food item
+
+    UserProfile:
+      type: object
+      properties:
+        username:
+          type: string
+          description: User's username or identifier
+        followers:
+          type: array
+          items:
+            type: string
+          description: List of usernames following the user
+        following:
+          type: array
+          items:
+            type: string
+          description: List of usernames the user is following
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string

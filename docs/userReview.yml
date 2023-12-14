@@ -1,0 +1,89 @@
+openapi: 3.1.0
+info:
+  title: User Review API
+  description: API to manage user reviews
+  version: "1.0.0"
+servers:
+  - url: http://localhost:3001
+paths:
+  /user-reviews:
+    get:
+      summary: Get all user reviews
+      tags:
+        - User Reviews
+      responses:
+        '200':
+          description: Successfully retrieved all user reviews
+          content:
+            application/json:
+              example:
+                reviews:
+                  - author: "Shrek"
+                    rating: 4
+                    comment: "Great product!"
+                    
+                  - author: "Fiona"
+                    rating: 5
+                    comment: "Excellent service!"
+                  
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                message: Error
+
+    post:
+      summary: Create a new user review
+      tags:
+        - User Reviews
+      requestBody:
+        required: true
+        description: JSON object containing user review information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userReview'
+      responses:
+        '201':
+          description: Successfully created a new user review
+          content:
+            application/json:
+              example:
+                message: Success
+        '400':
+          description: Invalid input provided
+          content:
+            application/json:
+              example:
+                message: Invalid Input
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                message: Error
+
+components:
+  schemas:
+    userReview:
+      type: object
+      required:
+        - userId
+        - rating
+        - comment
+      properties:
+        author:
+          type: string
+          description: Author name.
+          example: "Shrek"
+        
+        rating:
+          type: integer
+          description: Numeric rating given by the user (e.g., 1 to 5).
+          example: 4
+        comment:
+          type: string
+          description: The user's written review/comment.
+          example: "Great product!"
+        

@@ -1,0 +1,194 @@
+openapi: 3.1.0
+info:
+  title: Contributor API
+  description: ResQReach API to manage users
+  version: "1.0.0"
+servers:
+  - url: http://localhost:3001
+paths:
+  /contributor:
+    post:
+      summary: Create a new contributor
+      tags:
+        - Contributors
+      requestBody:
+        required: true
+        description: JSON object containing contributor information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/contributor'
+      responses:
+        '201':
+          description: Successfully created a new contributor
+          content:
+            application/json:
+              example:
+                message: Success
+        '400':
+          description: Invalid input provided
+          content:
+            application/json:
+              example:
+                message: Invalid Input
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                message: Error
+ 
+  /contributor/{id}:
+    get:
+      summary: Get detailed information about a specific contributor
+      tags:
+        - Contributors
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the contributor.
+          schema:
+            type: string
+            example: "243"
+      responses:
+        '200':
+          description: Successfully retrieved contributor data
+          content:
+            application/json:
+              example:
+                message: Success
+        '404':
+          description: Contributor not found
+          content:
+            application/json:
+              example:
+                message: User not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                message: Error
+ 
+    put:
+      summary: Update an existing contributor
+      tags:
+        - Contributors
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the contributor to be updated.
+          schema:
+            type: string
+            example: "1"
+      requestBody:
+        required: true
+        description: JSON object containing contributor information to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/contributor'
+      responses:
+        '200':
+          description: Successfully updated contributor data
+          content:
+            application/json:
+              example:
+                message: Success
+        '400':
+          description: Invalid input provided
+          content:
+            application/json:
+              example:
+                message: Invalid input
+        '404':
+          description: contributor not found
+          content:
+            application/json:
+              example:
+                message: User not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                message: Error
+ 
+    delete:
+      summary: Delete a contributor
+      tags:
+        - Contributors
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the contributor to be deleted.
+          schema:
+            type: string
+            example: "243"
+      responses:
+        '204':
+          description: Successfully deleted the contributor
+          content:
+            application/json:
+              example:
+                message: Delete Success
+        '404':
+          description: contributor not found
+          content:
+            application/json:
+              example:
+                message: User not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                message: Error
+ 
+components:
+  schemas:
+    contributor:
+      type: object
+      required:
+        - username
+        - email
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the contributor, automatically generated.
+          example: "123"
+        username:
+          type: string
+          description: The contributor's chosen username. It must be unique.
+          example: "john_doe"
+        email:
+          type: string
+          format: email
+          description: The contributor's email address. It is used for communication and login.
+          example: "john.doe@example.com"
+        fullName:
+          type: string
+          description: Full legal name of the contributor.
+          example: "John Doe"
+        role:
+          type: string
+          description: The role of the contributor in the system.
+          enum:
+            - admin
+            - volunteer
+            - user
+          example: "User"
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp when the contributor was created in the system.
+          example: "2023-01-01T12:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp of the last update made to the contributor's profile.
+          example: "2023-01-15T12:00:00Z"

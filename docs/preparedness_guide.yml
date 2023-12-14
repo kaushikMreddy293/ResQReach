@@ -1,0 +1,236 @@
+openapi: 3.1.0
+info:
+  title: Disaster Response and Preparedness API
+  description: API to manage disaster reports, alerts and resources.
+  version: "1.0.0"
+servers:
+  - url: https://localhost:3001
+
+paths:
+  /preparedness-guides:
+    get:
+      summary: List all preparedness guides
+      tags:
+        - Preparedness Guides
+      responses:
+        '200':
+          description: Successfully retrieved a list of preparedness guides
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PreparednessGuide'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/4xxErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/5xxErrorResponse'
+
+    post:
+      summary: Create a new preparedness guide
+      tags:
+        - Preparedness Guides
+      requestBody:
+        required: true
+        description: JSON object containing new preparedness guide information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreparednessGuide'
+      responses:
+        '201':
+          description: Preparedness guide successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreparednessGuide'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/4xxErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/5xxErrorResponse'
+
+  /preparedness-guides/{id}:
+    put:
+      summary: Update an existing preparedness guide
+      tags:
+        - Preparedness Guides
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the preparedness guide to be updated.
+          schema:
+            type: string
+            format: uuid
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        description: JSON object containing updated information for the preparedness guide
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreparednessGuide'
+      responses:
+        '200':
+          description: Successfully updated the preparedness guide
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PreparednessGuide'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/4xxErrorResponse'
+        '404':
+          description: Guide not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/4xxErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/5xxErrorResponse'
+
+    delete:
+      summary: Delete a preparedness guide
+      tags:
+        - Preparedness Guides
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the preparedness guide to be deleted.
+          schema:
+            type: string
+            format: uuid
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '204':
+          description: Successfully deleted the preparedness guide
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeleteGuide'
+        '404':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/4xxErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/5xxErrorResponse'
+
+components:
+  schemas:
+    PreparednessGuide:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the guide, automatically generated.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        title:
+          type: string
+          description: Title of the preparedness guide.
+          example: "Earthquake Safety Measures"
+        content:
+          type: string
+          description: Detailed content of the guide, providing instructions and information.
+          example: "Earthquakes can occur without warning..."
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp when the guide was last updated.
+          example: "2023-01-01T12:00:00Z"
+      required:
+        - title
+        - content
+    4xxErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: integer
+          format: int32
+          description: Standardized error code representing the error type.
+          example: 4xx
+        errorMessage:
+          type: string
+          description: Human-readable message describing the error.
+          example: "Bad Request Error"
+        errorInfo:
+          type: object
+          additionalProperties: true
+          description: Additional details about the error if applicable.
+          example: "HTTP 4xx: Exception occured from API"
+      required:
+        - errorCode
+        - errorMessage
+    5xxErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: integer
+          format: int32
+          description: Standardized error code representing the error type.
+          example: 5xx
+        errorMessage:
+          type: string
+          description: Human-readable message describing the error.
+          example: "Internal Server Error"
+        errorInfo:
+          type: object
+          additionalProperties: true
+          description: Additional details about the error if applicable.
+          example: "HTTP 5xx: Exception occured from API"
+      required:
+        - errorCode
+        - errorMessage
+    DeleteGuide:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the guide, automatically generated.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        title:
+          type: string
+          description: Title of the preparedness guide.
+          example: "Earthquake Safety"
+        message:
+          type: string
+          description: Detailed content of the guide, providing instructions and information.
+          example: "Guide deleted"
+      required:
+        - title
+        - message
