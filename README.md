@@ -48,6 +48,3 @@ ResQReach is a Progressive Web Application aimed at enhancing disaster response 
 ### Object Model Diagram for ResQReach
 ![This is an alt text.](./ResQReach.png "This is the Object Model Diagram image.")
 
-### Presentation vidoe link
-https://northeastern-my.sharepoint.com/:v:/g/personal/malikireddy_k_northeastern_edu/EWYduGxTJeFLrGo-80uGkywBgF1s6j4jJlmyaG-dTIPzdg?referrer=Teams.TEAMS-ELECTRON&referrerScenario=MeetingChicletGetLink.view.view
-
