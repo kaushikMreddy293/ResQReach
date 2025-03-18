@@ -3,6 +3,15 @@
 ## Introduction
 ResQReach is a Progressive Web Application aimed at enhancing disaster response and preparedness through active community engagement. This application empowers users to report emergencies, access preparedness resources and facilitate sharing of leftover food from restaurants, thus playing a crucial role in crisis management.
 
+
+## Screenshots
+<img width="1280" alt="image" src="https://github.com/user-attachments/assets/2b2c7941-36e2-487d-9f4b-8dcfb918903c" />
+<img width="1280" alt="image" src="https://github.com/user-attachments/assets/b74f8aaf-70b5-4f36-9034-da7e32e85c2e" />
+<img width="1280" alt="image" src="https://github.com/user-attachments/assets/abe94197-0f75-4042-96c3-d4aee104ae71" />
+
+
+
+
 ## Features
 
 ### Emergency Reporting System
